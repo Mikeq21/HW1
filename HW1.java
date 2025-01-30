@@ -1,6 +1,6 @@
 
 /*
- * *** PLACE YOUR NAME / SECTION  HERE ***
+ * *** Michael Quiroga / SECTION  272-001 ***
  *
  * Homework # 1 (Programming Assignment). This Java class defines some basic
  * manipulation operations on Linked-Lists and Stacks.
@@ -86,11 +86,24 @@ public class HW1 {
          * found in the linked-list that is less than thr parameter value passed.
          */
         public void removeElementsLT ( int ltValue ) {
+            // In a sorted list, if the head is underneath this value, the list should now be empty.
+            while (this.head != null && this.head.data < ltValue){
+                this.head = this.head.next;
+            }
 
-            // YOUR CODE GOES HERE
+            Node current = this.head;
+
+            // Traverse the remaining list and remove nodes with data less than the ltValue
+            while (current != null && current.next != null) {
+                if (current.next.data < ltValue) {
+                    current.next = current.next.next; // Skip the node with the value less than ltValue
+                } else {
+                    current = current.next; // Move to the next node if the value is more than ltValue
+                }
+            }
 
             return;
-        }
+        }  // removeElementsLT - Michael Quiroga 1/28/25
 
 
         /*
@@ -100,10 +113,29 @@ public class HW1 {
 
         public void removeElement ( int value ) {
 
-            // YOUR CODE GOES HERE
+            // Handle the case where the HEAD is the wanted value
+            while (this.head != null && this.head.data == value) {
+                this.head = this.head.next;
+            }
+
+            // If the list is empty after removing the head, return - skip the while loop
+            if (this.head == null) {
+                return;
+            }
+
+            Node current = this.head;
+
+            // Traverse and remove as we go
+            while (current.next != null) {
+                if (current.next.data == value) {
+                    current.next = current.next.next; // Point the current node to the second-next node
+                } else {
+                    current = current.next; // Only continue when we do not remove a node
+                }
+            }
 
             return;
-        }
+        } // removeElement - Michael Quiroga 1/28/25
 
 
         /*
@@ -158,11 +190,22 @@ public class HW1 {
         public static boolean isPalindrome(String input) {
 
             Stack<Character> stack = new Stack<>();
-            input = input.toLowerCase().replaceAll("\\s+", "");
+            input = input.toLowerCase().replaceAll("\\s+", ""); // Case insensitive and SKIP spaces
 
-            // Your CODE GOES HERE
-            return false;
-        }
+            boolean is_a_palindrome = true;
+
+            for (int i = 0; i < input.length() / 2; i++) {
+                stack.push(input.charAt(i));
+            }
+
+            for (int i = (input.length() + 1) / 2; i < input.length(); i++) {
+                if (stack.pop() != input.charAt(i)) {
+                    is_a_palindrome = false;
+                    break;
+                }
+            }
+            return is_a_palindrome;
+        } // isPalindrome method - Michael Quiroga 1/28/25
 
 
         /*
@@ -182,9 +225,29 @@ public class HW1 {
          */
         public static int findLargestK(Stack<Integer> stack, int k) {
 
-            // YOUR CODE GOES HERE
-            return -1;
-        }
+            Stack<Integer> tempStack = new Stack<>();
+            int largestIndex = 0;
+            int size = stack.size();
+            int currentIndex = size - 1;
+
+            // Traverse the original stack and find the largest index
+            while (!stack.isEmpty()) {
+                int currentValue = stack.pop();
+                tempStack.push(currentValue);
+
+                if (currentValue == k) {
+                    largestIndex = currentIndex; // In reverse order, the first value that equals k IS the biggest index
+                    break;
+                }
+                currentIndex--; // Move backwards through the original stack
+            }
+
+            // Restore the original stack
+            while (!tempStack.isEmpty()) {
+                stack.push(tempStack.pop());
+            }
+            return largestIndex;
+        } // findLargestK method - Michael Quiroga 1/28/25
 
     }  // End class Stacks
 
@@ -219,7 +282,7 @@ public class HW1 {
         */
 
         // RETURN THE CORRECT OPTION NUMBER LISTED ABOVE
-        return -1;
+        return 3;
     }
 
 
@@ -240,7 +303,7 @@ public class HW1 {
          */
 
         // RETURN THE CORRECT OPTION LISTED ABOVE
-        return -1;
+        return 2;
     }
 
 }
